@@ -2,12 +2,12 @@ import { asyncHandler } from "../utills/asyncHandler.js";
 import { ApiError } from "../utills/ApiError.js"
 import { ApiResponse } from "../utills/ApiResponse.js"
 import { User } from "../models/user.model.js"
+import { deleteMediaFromCloudinary, uploadMedia } from "../utills/cloudinary.js";
 
 
 
 
 const generateAccessAndRereshTokens = async (userId) => {
-
     try {
 
         const user = await User.findById(userId)
@@ -97,9 +97,32 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     if (!user) {
         throw new ApiError(404, "Profile Not found")
     }
-
     return res.status(200).json(new ApiResponse(200, user, "Current user fetched successfully"))
+})
 
+export const updateProfile = asyncHandler(async (req, res) => {
+    const userId = req.id;
+    const { fullName } = req.body;
+    const profilePhoto = req.file;
+
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    // extract publicId from url  if exists 
+    if (user.photoUrl) {
+        const publicId = user.photoUrl.split("/").pop().split(".")[0];// extract public id 
+        deleteMediaFromCloudinary(publicId)
+    }
+    // upload new  photo
+    const cloudResponse = await uploadMedia(profilePhoto.path);
+    const photoUrl = cloudResponse.secure_url;
+
+    const updateData = { fullName, photoUrl };
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true }).select("-password -refreshToken");
+    return res.status(200).json(new ApiResponse(200, updatedUser, "Profile updated successfully"))
 
 })
 

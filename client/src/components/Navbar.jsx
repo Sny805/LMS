@@ -1,5 +1,5 @@
 import { School } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from './ui/button'
 import {
     DropdownMenu,
@@ -19,10 +19,27 @@ import {
 } from "@/components/ui/avatar"
 import DarkMode from '@/utills/DarkMode'
 import { SheetDemo } from '@/utills/SheetDemo'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useLogoutUserMutation } from '@/features/api/authApi'
+import { toast } from 'sonner'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
-    let user = true;
+    const navigate = useNavigate()
+    const { user } = useSelector((store) => store.auth);
+    const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+
+    const handleLogout = () => {
+        logoutUser();
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success(data?.message || "User log out.");
+            navigate("/login");
+        }
+    }, [isSuccess]);
+
     return (
         <div className='h-16 dark:bg-[#0A0AOA] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 right-0 left-0 duration-300 z-10'>
             {/* Desktop */}
@@ -38,7 +55,7 @@ const Navbar = () => {
                         user ? (<DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Avatar>
-                                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                    <AvatarImage src={user?.photoUrl || "https://github.com/shadcn.png"} alt="@shadcn" />
                                     <AvatarFallback>CN</AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
@@ -54,26 +71,32 @@ const Navbar = () => {
                                         </Link>
 
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem onClick={handleLogout}>
                                         Log out
 
                                     </DropdownMenuItem>
 
 
                                 </DropdownMenuGroup>
-                                <DropdownMenuSeparator />
 
 
 
-                                <DropdownMenuItem>
-                                    Dashboard
+                                {
+                                    user.role === "instructor" && (
+                                        <>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem>
+                                                Dashboard
+                                            </DropdownMenuItem>
+                                        </>
+                                    )
+                                }
 
-                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>) : (
                             <div className='flex gap-2 items-center'>
-                                <Button variant="outline">Login</Button>
-                                <Button>Signup</Button>
+                                <Button variant="outline" onClick={() => navigate("/login")}>Login</Button>
+                                <Button onClick={() => navigate("/signup")}>Signup</Button>
                             </div>
                         )
                     }

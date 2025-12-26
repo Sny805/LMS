@@ -49,17 +49,15 @@ export function Login() {
         }
     }
 
-
-
-
-
     const handleRoleChange = (value) => {
         setSignupIn({ ...signupIn, role: value })
     }
+
     const [registerUser, { data: registerData, error: registerError, isLoading: registerLoading, isSuccess: registerSuccess }] = useRegisterUserMutation();
+
     const [loginUser, { data: loginData, error: loginError, isLoading: loginLoading, isSuccess: loginSuccess }] = useLoginUserMutation()
 
-    console.log("object,", loginData);
+ 
 
     useEffect(() => {
         if (registerSuccess && registerData) {
@@ -95,7 +93,7 @@ export function Login() {
 
     return (
         <div className="flex justify-center items-center w-full min-h-screen">
-            <Tabs defaultValue="signup" className="w-[400px]">
+            <Tabs defaultValue="login" className="w-[400px]">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="signup">Sign Up</TabsTrigger>
                     <TabsTrigger value="login">Login</TabsTrigger>

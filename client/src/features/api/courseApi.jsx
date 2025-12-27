@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const USER_API = "http://localhost:3000/api/v1/course"
+const USER_API = "/api/v1/course"
 
 export const courseApi = createApi({
     reducerPath: "courseApi",
@@ -43,6 +43,7 @@ export const courseApi = createApi({
 
             )
         }),
+        /////// Lecture 
         createLecture: builder.mutation({
             query: ({ lectureTitle, courseId }) => ({
                 url: `/${courseId}/lecture`,

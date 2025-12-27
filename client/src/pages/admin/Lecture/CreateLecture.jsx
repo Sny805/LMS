@@ -6,14 +6,16 @@ import { Loader2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
+import Lecture from './Lecture'
 
 const CreateLecture = () => {
     const [lectureTitle, setLectureTitle] = useState("");
 
     const { courseId } = useParams();
 
-    const [createLecture, { data, error, isLoading, isSuccess, refetch }] = useCreateLectureMutation();
-    const { data: lectureData, isLoading: lectureLoading } = useGetCourseLectureQuery(courseId);
+    const [createLecture, { data, error, isLoading, isSuccess  }] = useCreateLectureMutation();
+    const { data: lectureData, isLoading: lectureLoading, isError: lectureError,refetch } = useGetCourseLectureQuery(courseId);
+
 
     const createLectureHandler = async () => {
         await createLecture({ lectureTitle, courseId })
@@ -21,8 +23,8 @@ const CreateLecture = () => {
 
     useEffect(() => {
         if (isSuccess) {
-
             toast.success(data.message);
+            refetch();
         }
         if (error) {
             toast.error(error.data.message);
@@ -58,6 +60,15 @@ const CreateLecture = () => {
                     ) : (
                         "Create Lecture"
                     )}</Button>
+                </div>
+                <div className="mt-10">
+                    {lectureLoading ? (<p>Loading...</p>) : lectureError
+                        ? (<p>Failed to load lecture</p>) :
+                        (lectureData.lectures.length == 0 ? <p>No Lecture Found</p> :
+                            lectureData?.lectures?.map((lecture, i) => (
+                                <Lecture lecture={lecture} key={lecture.id} i={i} courseId={courseId} />
+                            ))
+                        )}
                 </div>
             </div>
         </div>

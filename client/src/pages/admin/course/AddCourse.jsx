@@ -36,6 +36,9 @@ const AddCourse = () => {
             toast.success(data?.message || "Course created.");
             navigate("/admin/course");
         }
+        if(error){
+            toast.error(error?.data?.message || "Title and Category is required")
+        }
     }, [isSuccess, error])
 
 

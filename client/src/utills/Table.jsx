@@ -34,7 +34,7 @@ export default function TableDemo({ courses }) {
                     <TableRow key={course._id}>
                         <TableCell className="font-medium">{course?.courseTitle}</TableCell>
                         <TableCell>{course?.coursePrice || "NA"}</TableCell>
-                        <TableCell><Badge>{course?.isPublihsed ? "Published" : "Draft"}</Badge></TableCell>
+                        <TableCell><Badge>{course?.isPublished ? "Published" : "Draft"}</Badge></TableCell>
                         <TableCell className="text-right">
                             <Button size='sm' variant='ghost' className="cursor-pointer" onClick={() => navigate(`${course._id}`)}><Edit /></Button>
                         </TableCell>

@@ -4,7 +4,7 @@ const USER_API = "/api/v1/course"
 
 export const courseApi = createApi({
     reducerPath: "courseApi",
-    tagTypes: ['Refetch_Creator_Course','Refetch_Lecture'],
+    tagTypes: ['Refetch_Creator_Course', 'Refetch_Lecture'],
     baseQuery: fetchBaseQuery({
         baseUrl: USER_API,
         credentials: "include"
@@ -43,7 +43,8 @@ export const courseApi = createApi({
 
             )
         }),
-        /////// Lecture 
+
+        ////  Lecture  Api calls
         createLecture: builder.mutation({
             query: ({ lectureTitle, courseId }) => ({
                 url: `/${courseId}/lecture`,
@@ -61,7 +62,7 @@ export const courseApi = createApi({
                     method: "GET"
                 }
             ),
-            providesTags:["Refetch_Lecture"]
+            providesTags: ["Refetch_Lecture"]
         }),
         editLecture: builder.mutation({
             query: ({ courseId, lectureId, lectureTitle, videoInfo, isPreviewFree }) => ({
@@ -77,13 +78,22 @@ export const courseApi = createApi({
                     method: "DELETE"
                 }
             ),
-            invalidatesTags:["Refetch_Lecture"]
+            invalidatesTags: ["Refetch_Lecture"]
         }),
-        getLectureById:builder.query({
-            query:(lectureId)=>({
-                url:`/lecture/${lectureId}`,
-                method:"GET"
+        getLectureById: builder.query({
+            query: (lectureId) => ({
+                url: `/lecture/${lectureId}`,
+                method: "GET"
             })
+        }),
+
+        publishCourse: builder.mutation({
+            query: ({ courseId, publish }) => ({
+                url: `/${courseId}`,
+                method: "PATCH",
+                params: { publish }
+            }),
+            invalidatesTags: ["Refetch_Creator_Course"]
         })
 
 
@@ -101,4 +111,5 @@ export const {
     useEditLectureMutation,
     useDeleteLectureMutation,
     useGetLectureByIdQuery,
+    usePublishCourseMutation
 } = courseApi

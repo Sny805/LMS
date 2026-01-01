@@ -39,7 +39,7 @@ const courseSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    isPublihsed: {
+    isPublished: {
         type: Boolean,
         default: false
     }

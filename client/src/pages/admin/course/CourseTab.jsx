@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import { useEditCourseMutation, useGetCourseByIdQuery } from '@/features/api/courseApi';
+import { useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation } from '@/features/api/courseApi';
 import { toast } from 'sonner';
 
 const CourseTab = () => {
@@ -58,7 +58,8 @@ const CourseTab = () => {
     }
 
     const [editCourse, { data, isLoading, error, isSuccess }] = useEditCourseMutation();
-    const { data: courseData, isLoading: isCourseLoading } = useGetCourseByIdQuery(courseId, { refetchOnMountOrArgChange: true })
+    const { data: courseData, isLoading: isCourseLoading, refetch } = useGetCourseByIdQuery(courseId, { refetchOnMountOrArgChange: true });
+    const [publishCourse, { isLoading: publishLoading, isSuccess: publishSuccess }] = usePublishCourseMutation()
 
     // update course
     const updateCourseHandler = async () => {
@@ -71,6 +72,24 @@ const CourseTab = () => {
         formData.append("coursePrice", input.coursePrice);
         formData.append("courseThumbnail", input.courseThumbnail);
         await editCourse({ formData, courseId });
+    }
+
+    // Publish course 
+
+    const publishStatusHandler = async (isPublished) => {
+        console.log(isPublished)
+        try {
+            const response = await publishCourse({ courseId, publish: isPublished })
+            if (response.data) {
+                refetch();
+                toast.success(
+                    response?.data?.message ||
+                    (isPublished ? "Course Published" : "Course Unpublished")
+                );
+            }
+        } catch (error) {
+            toast.error(error?.data?.message || "Failed to publish")
+        }
     }
 
 
@@ -106,7 +125,7 @@ const CourseTab = () => {
 
 
 
-    const isPublished = true;
+
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between">
@@ -117,8 +136,8 @@ const CourseTab = () => {
                     </CardDescription>
                 </div>
                 <div className='space-x-2'>
-                    <Button variant="outline">
-                        {isPublished ? "Unpublished" : "Published"}
+                    <Button disabled={courseData?.course.lectures.length === 0} variant="outline" onClick={() => publishStatusHandler(!courseData?.course.isPublished)}>
+                        {courseData?.course?.isPublished ? "Unpublished" : "Published"}
                     </Button>
                     <Button>Remove Course</Button>
                 </div>

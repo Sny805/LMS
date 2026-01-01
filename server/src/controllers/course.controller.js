@@ -140,38 +140,37 @@ export const getCourseLecture = asyncHandler(async (req, res) => {
     }
 })
 
-export const editLecture =
-    asyncHandler(async (req, res) => {
-        try {
-            const { lectureTitle, videoInfo, isPreviewFree } = req.body;
-            const { courseId, lectureId } = req.params;
-            const lecture = await Lecture.findById(lectureId);
-            if (!lecture) {
-                throw new Error(404, "Lecture not found")
-            }
-            if (lectureTitle) lecture.lectureTitle = lectureTitle;
-            if (videoInfo?.videoUrl) lecture.videoUrl = videoInfo.videoUrl;
-            if (videoInfo?.publicId) lecture.publicId = videoInfo.publicId;
-            lecture.isPreviewFree = isPreviewFree;
-            await lecture.save();
-
-            // Ensure course still has the lecture id and if it was not already added
-            const course = await Course.findById(courseId);
-            if (!course) {
-                throw new ApiError(404, "Course Not Found")
-            }
-            if (course && !course.lectures.includes(lecture._id)) {
-                course.lectures.push(lectureId)
-                await course.save();
-            }
-
-            return res.status(200).json(new ApiResponse(200, lecture, "Lecture Updated Successfully"))
-
-
-        } catch (error) {
-            throw new Error(500, "Failed to edit lecture")
+export const editLecture = asyncHandler(async (req, res) => {
+    try {
+        const { lectureTitle, videoInfo, isPreviewFree } = req.body;
+        const { courseId, lectureId } = req.params;
+        const lecture = await Lecture.findById(lectureId);
+        if (!lecture) {
+            throw new Error(404, "Lecture not found")
         }
-    })
+        if (lectureTitle) lecture.lectureTitle = lectureTitle;
+        if (videoInfo?.videoUrl) lecture.videoUrl = videoInfo.videoUrl;
+        if (videoInfo?.publicId) lecture.publicId = videoInfo.publicId;
+        lecture.isPreviewFree = isPreviewFree;
+        await lecture.save();
+
+        // Ensure course still has the lecture id and if it was not already added
+        const course = await Course.findById(courseId);
+        if (!course) {
+            throw new ApiError(404, "Course Not Found")
+        }
+        if (course && !course.lectures.includes(lecture._id)) {
+            course.lectures.push(lectureId)
+            await course.save();
+        }
+
+        return res.status(200).json(new ApiResponse(200, lecture, "Lecture Updated Successfully"))
+
+
+    } catch (error) {
+        throw new Error(500, "Failed to edit lecture")
+    }
+})
 
 
 export const deleteLecture = asyncHandler(async (req, res) => {
@@ -197,7 +196,7 @@ export const deleteLecture = asyncHandler(async (req, res) => {
 })
 
 
-export const getLectureById = asyncHandler (async (req, res) => {
+export const getLectureById = asyncHandler(async (req, res) => {
     try {
         const { lectureId } = req.params;
         const lecture = await Lecture.findById(lectureId);
@@ -217,3 +216,21 @@ export const getLectureById = asyncHandler (async (req, res) => {
     }
 })
 
+// publish unpublish course logic 
+
+export const togglePublishCourse = asyncHandler(async (req, res) => {
+    const { courseId } = req.params;
+    const { publish } = req.query;
+    console.log(publish)
+    const course = await Course.findById(courseId);
+    if (!course) {
+        throw new ApiError(404, "Course not Found")
+    }
+    // publish status based on the query parameter
+    const isPublished = publish === "true";
+    course.isPublished = isPublished;
+    await course.save();
+    return res.status(200).json({
+        message: `Course is ${isPublished ? "Published" : "Unpublished"}`,
+    });
+})

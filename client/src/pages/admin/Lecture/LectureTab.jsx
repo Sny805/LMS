@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Switch } from '@/components/ui/switch'
-import { useDeleteLectureMutation, useEditLectureMutation, useGetCourseByIdQuery } from '@/features/api/courseApi'
+import { useDeleteLectureMutation, useEditLectureMutation, useGetLectureByIdQuery } from '@/features/api/courseApi'
 import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
@@ -64,8 +64,15 @@ const LectureTab = () => {
     }
     const [editLecture, { data, isLoading, error, isSuccess }] = useEditLectureMutation()
     const [deleteLecture, { data: removeData, isSuccess: deleteSuccesss, error: deleteError, isLoading: removeLoading }] = useDeleteLectureMutation()
-       const {data:lectureData}=useGetCourseByIdQuery(lectureId)
-         console.log(lectureData)
+    const { data: lectureData } = useGetLectureByIdQuery(lectureId)
+    const lecture = lectureData?.lecture
+      console.log(lecture)
+    useEffect(() => {
+        setLectureTitle(lecture?.lectureTitle)
+        setIsFree(lecture?.isPreviewFree);
+        setUploadProgress(lecture?.videoInfo)
+    }, [lecture])
+
     const deleleLectureHandler = async () => {
         await deleteLecture(lectureId)
     }
@@ -141,7 +148,7 @@ const LectureTab = () => {
                     )}
                 </div>
                 <div className="flex items-center space-x-2 my-5">
-                    <Switch id="airplane-mode" />
+                    <Switch id="airplane-mode" checked={isFree} onCheckedChange={setIsFree} />
                     <Label htmlFor="airplane-mode">Is this video FREE</Label>
                 </div>
                 {
@@ -155,11 +162,11 @@ const LectureTab = () => {
                 <div>
                     <Button onClick={editLectureHandler} disabled={isLoading}>
                         {
-                        isLoading ? <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Please wait
-                        </> : "Update Lecture"
-                    }
+                            isLoading ? <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Please wait
+                            </> : "Update Lecture"
+                        }
                     </Button>
                 </div>
             </CardContent>

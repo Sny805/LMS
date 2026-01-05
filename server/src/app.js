@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import courseRouter from "./routes/course.routes.js";
 import mediaRoute from "./routes/media.routes.js"
-
+import purchaseRoute from "./routes/purchaseCourse.routes.js"
 const app = express()
 
 
@@ -19,6 +19,7 @@ app.use(express.static("public"))
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/course", courseRouter)
 app.use("/api/v1/media", mediaRoute)
+app.use("/api/v1/purchase",purchaseRoute)
 
 
 

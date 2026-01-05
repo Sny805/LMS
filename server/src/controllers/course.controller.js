@@ -92,6 +92,14 @@ export const getCourseById = asyncHandler(async (req, res) => {
 
 })
 
+export const getPublishedCourse = asyncHandler(async (req, res) => {
+    const courses = await Course.find({ isPublished: true }).populate({ path: "creator", select: "fullName photoUrl" });
+    if (!courses) {
+        throw new ApiError(404, "Course not found")
+    }
+    return res.status(200).json({ courses })
+})
+
 ///// Lecture Controller 
 
 export const createLecture = asyncHandler(async (req, res) => {

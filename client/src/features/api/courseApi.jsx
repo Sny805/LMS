@@ -25,6 +25,13 @@ export const courseApi = createApi({
             }),
             providesTags: ['Refetch_Creator_Course']
         }),
+         getPublishedCourse: builder.query({
+            query: () => ({
+                url: "/published-course",
+                method: "GET",
+            }),
+            providesTags: ['Refetch_Creator_Course']
+        }),
         editCourse: builder.mutation({
             query: ({ formData, courseId }) => ({
                 url: `/${courseId}`,
@@ -111,5 +118,6 @@ export const {
     useEditLectureMutation,
     useDeleteLectureMutation,
     useGetLectureByIdQuery,
-    usePublishCourseMutation
+    usePublishCourseMutation,
+    useGetPublishedCourseQuery
 } = courseApi

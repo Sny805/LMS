@@ -66,7 +66,7 @@ const LectureTab = () => {
     const [deleteLecture, { data: removeData, isSuccess: deleteSuccesss, error: deleteError, isLoading: removeLoading }] = useDeleteLectureMutation()
     const { data: lectureData } = useGetLectureByIdQuery(lectureId)
     const lecture = lectureData?.lecture
-      console.log(lecture)
+    
     useEffect(() => {
         setLectureTitle(lecture?.lectureTitle)
         setIsFree(lecture?.isPreviewFree);

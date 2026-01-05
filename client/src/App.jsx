@@ -18,6 +18,8 @@ import AddCourse from './pages/admin/course/AddCourse'
 import EditCourse from './pages/admin/course/EditCourse'
 import CreateLecture from './pages/admin/Lecture/CreateLecture'
 import EditLecture from './pages/admin/Lecture/EditLecture'
+import CourseDetails from './pages/student/CourseDetails'
+import Progress from './pages/student/Progress'
 
 function App() {
 
@@ -50,6 +52,14 @@ function App() {
           path: "profile",
           element: <Profile />
         },
+        {
+          path: "course-progress/:courseId",
+          element: <Progress />
+        },
+        {
+          path: "course-detail/:courseId",
+          element: <CourseDetails />
+        },
         // admin routes start from here
         {
           path: "admin",
@@ -71,11 +81,12 @@ function App() {
               path: "course/:courseId",
               element: <EditCourse />
             },
+
             {
               path: "course/:courseId/lecture",
               element: <CreateLecture />
             },
-             {
+            {
               path: "course/:courseId/lecture/:lectureId",
               element: <EditLecture />
             }

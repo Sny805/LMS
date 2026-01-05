@@ -1,7 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
 
-const courseSchema = new Schema({
+const courseSchema = new Schema(
+    {
     courseTitle: {
         type: String,
         required: true
@@ -22,6 +23,9 @@ const courseSchema = new Schema({
     },
     coursePrice: {
         type: Number
+    },
+    courseThumbnail: {
+        type: String
     },
     enrolledStudents: [
         {

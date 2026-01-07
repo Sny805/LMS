@@ -5,6 +5,7 @@ import userRouter from "./routes/user.routes.js";
 import courseRouter from "./routes/course.routes.js";
 import mediaRoute from "./routes/media.routes.js"
 import purchaseRoute from "./routes/purchaseCourse.routes.js"
+import courseProgressRoute from "./routes/courseProgressRoute.js"
 const app = express()
 
 
@@ -20,6 +21,7 @@ app.use("/api/v1/user", userRouter)
 app.use("/api/v1/course", courseRouter)
 app.use("/api/v1/media", mediaRoute)
 app.use("/api/v1/purchase",purchaseRoute)
+app.use("/api/v1/progress", courseProgressRoute);
 
 
 

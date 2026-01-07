@@ -19,7 +19,7 @@ import EditCourse from './pages/admin/course/EditCourse'
 import CreateLecture from './pages/admin/Lecture/CreateLecture'
 import EditLecture from './pages/admin/Lecture/EditLecture'
 import CourseDetails from './pages/student/CourseDetails'
-import Progress from './pages/student/Progress'
+import Progress from './pages/student/CourseProgress'
 
 function App() {
 

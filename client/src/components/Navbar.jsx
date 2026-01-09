@@ -46,7 +46,7 @@ const Navbar = () => {
             <div className='max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full'>
                 <div className='flex gap-10'>
                     <School size={30} />
-                <Link to="/"><h1 className='hidden md:block font-extrabold text-2xl '>E-Learning</h1></Link> 
+                    <Link to="/"><h1 className='hidden md:block font-extrabold text-2xl '>E-Learning</h1></Link>
                 </div>
                 {/* User Icons and darkmode icons */}
 
@@ -86,7 +86,7 @@ const Navbar = () => {
                                         <>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem>
-                                               <Link to="admin"> Dashboard</Link> 
+                                                <Link to="/admin/dashboard"> Dashboard</Link>
                                             </DropdownMenuItem>
                                         </>
                                     )
@@ -108,7 +108,7 @@ const Navbar = () => {
 
             <div className='flex justify-between items-center px-4 md:hidden h-full'>
                 <h1 className='text-2xl font-extrabold'>E-Learning</h1>
-                <SheetDemo />
+                <SheetDemo user={user}/>
             </div>
 
 

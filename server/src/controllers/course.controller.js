@@ -29,6 +29,41 @@ export const createCourse = asyncHandler(async (req, res) => {
 
 })
 
+export const searchCourse = asyncHandler(async (req, res) => {
+    const { query = "", categories = [], sortByPrice = "" } = req.query;
+
+    // create searchQuery 
+    const SearchCriteria = {
+        isPublished: true,
+        $or: [
+            { courseTitle: { $regex: query, $options: "i" } },
+            { subTitle: { $regex: query, $options: "i" } },
+            { category: { $regex: query, $options: "i" } },
+        ]
+    }
+
+    // if categories selected
+    if (categories.length > 0) {
+        SearchCriteria.category = { $in: categories }
+    }
+
+    // define sorting order 
+    const sortOptions = {};
+    if (sortByPrice === "low") {
+        sortOptions.coursePrice = 1
+    }
+    else if (sortByPrice === "high") {
+        sortOptions.coursePrice = -1
+    }
+
+    let courses = await Course.find(SearchCriteria).populate({ path: "creator", select: "name photoUrl" }).sort(sortOptions);
+
+    return res.status(200).json({
+        success: true,
+        courses: courses || []
+    })
+})
+
 
 export const getCreatorCourses = asyncHandler(async (req, res) => {
     try {

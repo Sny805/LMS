@@ -20,6 +20,10 @@ import CreateLecture from './pages/admin/Lecture/CreateLecture'
 import EditLecture from './pages/admin/Lecture/EditLecture'
 import CourseDetails from './pages/student/CourseDetails'
 import Progress from './pages/student/CourseProgress'
+import SearchPage from './pages/student/SearchPage'
+import { AdminRoutes, AuthenticatedUser, ProtectedRoute } from './components/ProtectedRoute'
+import PurchaseCourseProtected from './components/PurchaseCourseProtected'
+import { ThemeProvider } from './components/ThemeProvider'
 
 function App() {
 
@@ -38,15 +42,15 @@ function App() {
         },
         {
           path: "login",
-          element: <Login />
+          element: <AuthenticatedUser><Login /></AuthenticatedUser>
         },
         {
           path: "signup",
-          element: <Login />
+          element: <AuthenticatedUser><Login /></AuthenticatedUser>
         },
         {
           path: "my-learning",
-          element: <MyLearning />
+          element: <ProtectedRoute><MyLearning /></ProtectedRoute>
         },
         {
           path: "profile",
@@ -54,16 +58,20 @@ function App() {
         },
         {
           path: "course-progress/:courseId",
-          element: <Progress />
+          element: <ProtectedRoute><PurchaseCourseProtected><Progress /></PurchaseCourseProtected></ProtectedRoute>
         },
         {
           path: "course-detail/:courseId",
-          element: <CourseDetails />
+          element: <ProtectedRoute><CourseDetails /></ProtectedRoute>
+        },
+        {
+          path: "course/search",
+          element: <ProtectedRoute><SearchPage /></ProtectedRoute>
         },
         // admin routes start from here
         {
           path: "admin",
-          element: <Sidebar />,
+          element: <AdminRoutes><Sidebar />,</AdminRoutes>,
           children: [
             {
               path: "dashboard",
@@ -102,7 +110,9 @@ function App() {
   return (
     <>
       <main>
-        <RouterProvider router={appRouter} />
+        <ThemeProvider>
+          <RouterProvider router={appRouter} />
+        </ThemeProvider>
       </main>
 
     </>

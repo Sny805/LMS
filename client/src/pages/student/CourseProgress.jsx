@@ -59,7 +59,7 @@ const Progress = () => {
   return (
     <div className='max-w-7xl mx-auto p-4'>
       {/* display course Name */}
-      <div className="flex justify-between mb-4 mt-20">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between mb-4 mt-20">
         <h1 className='text-2xl font-bold'>{courseTitle}</h1>
         <Button
           onClick={completed ? handleInCompleteCourse : handleCompleteCourse}
@@ -75,7 +75,7 @@ const Progress = () => {
         </Button>
       </div>
       {/*Video Section */}
-      <div className="flex flex-col md:flex-row gap-6 border">
+      <div className="flex flex-col md:flex-row gap-6">
 
         <div className="flex-1 md:w-1/3 h-fit rounded-lg shadow-lg p-4">
           <div>

@@ -11,7 +11,7 @@ const CourseTable = () => {
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading courses</p>;
     return (
-        <div>
+        <div className='p-4 mt-16 md:p-0 md:mt-0'>
             <Link to="create"><Button className="cursor-pointer">Create a new course</Button></Link>
             <div className='mt-4'>
                 <TableDemo courses={data?.courses} />

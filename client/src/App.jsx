@@ -109,7 +109,7 @@ function App() {
 
   return (
     <>
-      <main>
+      <main className='overflow-y-hidden'>
         <ThemeProvider>
           <RouterProvider router={appRouter} />
         </ThemeProvider>

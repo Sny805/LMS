@@ -9,7 +9,7 @@ const EditLecture = () => {
     const courseId = params.courseId;
     return (
         <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mt-20 p-4 md:mt-0">
                 <Link to={`/admin/course/${courseId}/lecture`}>
                     <Button size="icon" variant="outline" className="rounded-full">
                         <ArrowLeft size={16} />

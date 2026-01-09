@@ -94,7 +94,7 @@ const LectureTab = () => {
 
 
     return (
-        <Card className="mt-4">
+        <Card className="m-4 ">
             <CardHeader>
                 <div>
                     <CardTitle>Edit Lecture</CardTitle>
